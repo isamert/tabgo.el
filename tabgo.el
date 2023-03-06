@@ -111,3 +111,6 @@
         (switch-to-buffer selected))
       (when-let (selected (map-elt tabgo-tab-bar-map result))
         (tab-switch (alist-get 'name selected)))))))
+
+(provide 'tabgo)
+;;; tabgo.el ends here
