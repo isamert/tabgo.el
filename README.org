@@ -1,3 +1,36 @@
 #+TITLE: tabgo.el
 
 Go to tab, avy style.
+
+[[file:https://user-images.githubusercontent.com/8031017/223504769-2e5feed5-28a9-4343-b543-18b36005bc08.gif]]
+
+* Installation
+You'll need to download the package and add it to your ~load-path~. Once you've done that, you can load the package with ~(require 'tabgo)~.
+
+Alternatively, you can use the ~straight~ or ~quelpa~ package managers in conjunction with ~use-package~.
+
+To use ~quelpa~, add the following code to your Emacs configuration:
+
+#+begin_src emacs-lisp
+  (use-package tabgo
+    :ensure t
+    :quelpa (tabgo :fetcher github :repo "isamert/tabgo.el"))
+#+end_src
+
+If you prefer ~straight~, use the following code instead:
+
+#+begin_src emacs-lisp
+  (use-package tabgo
+    :ensure t
+    :straight (:host github :repo "isamert/tabgo.el"))
+#+end_src
+
+* Usage
+
+To use ~tabgo~, bind the ~tabgo~ function to a key of your choice:
+
+#+begin_src emacs-lisp
+  (bind-key "M-t" #'tabgo)
+#+end_src
+
+There are also ~tabgo-line~ and ~tabgo-bar~ functions that you can use, ~tabgo~ is simply combination of these functions.
