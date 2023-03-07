@@ -1,0 +1,3 @@
+#+TITLE: tabgo.el
+
+Go to tab, avy style.
