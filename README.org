@@ -5,6 +5,7 @@ Go to tab, avy style.
 [[file:https://user-images.githubusercontent.com/8031017/223504769-2e5feed5-28a9-4343-b543-18b36005bc08.gif]]
 
 * Installation
+
 You'll need to download the package and add it to your ~load-path~. Once you've done that, you can load the package with ~(require 'tabgo)~.
 
 Alternatively, you can use the ~straight~ or ~quelpa~ package managers in conjunction with ~use-package~.
@@ -33,4 +34,15 @@ To use ~tabgo~, bind the ~tabgo~ function to a key of your choice:
   (bind-key "M-t" #'tabgo)
 #+end_src
 
+Once you have bound ~tabgo~, you can call it by pressing the key you bound it to. You'll see that highlighted characters appear on the tab-bar and tab-line tab names. Simply press the one that you want to go to and ~tabgo~ will switch to it for you.
+
 There are also ~tabgo-line~ and ~tabgo-bar~ functions that you can use, ~tabgo~ is simply combination of these functions.
+
+* Customization
+
+~tabgo~ comes with two customizable variables that allow you to bind specific keys to select tabs in the ~tab-line~ and ~tab-bar~. These variables are:
+
+- ~tabgo-tab-bar-keys~ :: keys to use for selecting ~tab-bar~ tabs.
+- ~tabgo-tab-line-keys~ :: keys to use for selecting ~tab-line~ tabs.
+
+You can customize these variables by setting them either as a string containing the characters you want to use or as a list of characters.
