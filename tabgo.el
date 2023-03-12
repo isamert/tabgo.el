@@ -1,26 +1,68 @@
+;;; tabgo.el --- Jump to tabs, avy style -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2023  Isa Mert Gurbuz
+
+;; Author: Isa Mert Gurbuz <isamertgurbuz@gmail.com>
+;; Version: 1.0.0
+;; Homepage: https://github.com/isamert/empv.el
+;; License: GPL-3.0-or-later
+;; Package-Requires: ((emacs "28.1"))
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; tabgo is a package that allows the user to switch between tabs in a
+;; graphical and more intuitive way, like avy.
+
+;; Typically you'll want to bind `tabgo' function to a key.
+;;
+;;     (bind-key "M-t" #'tabgo)
+;;
+;; Once you have bound `tabgo', you can call it by pressing the key
+;; you bound it to. You'll see that highlighted characters appear on
+;; the tab-bar and tab-line tab names. Simply press the one that you
+;; want to go to and `tabgo' will switch to it for you.
+
+;;; Code:
+
 (require 'map)
 (require 'tab-line)
 (require 'tab-bar)
 
 (defgroup tabgo nil
-  "TODO"
-  :group 'convenience)
+  "Jump to tabs, avy-style."
+  :group 'convenience
+  :prefix "tabgo-")
 
 (defface tabgo-face
   '((t (:weight bold :background "blue" :foreground "white")))
-  "TODO Face used for the leading chars.")
+  "Face used for the leading chars.")
 
 (defcustom tabgo-tab-bar-keys "123456789"
-  "TODO"
+  "Keys to use for selecting tab-bar tabs."
   :group 'tabgo
-  ;; TODO list<char> or string
-  :type 'list)
+  :type '(choice
+          (string :tag "String containing the characters")
+          (repeat character :tag "List of characters")))
 
 (defcustom tabgo-tab-line-keys "qwertyuiop"
-  "TODO"
+  "Keys to use for selecting tab-line tabs."
   :group 'tabgo
-  ;; TODO list<char> or string
-  :type 'list)
+  :type '(choice
+          (string :tag "String containing the characters")
+          (repeat character :tag "List of characters")))
 
 (defun tabgo--nth (n xs)
   (if (stringp xs)
@@ -94,7 +136,7 @@
 ;; FIXME multi char keys breaks the width, (substring 2 old-format)
 
 (defun tabgo-line ()
-  "TODO"
+  "Jump to tabs on the tab-line."
   (interactive)
   (tabgo--with-tab-line-highlighted
    (let ((result (read-key "Which?")))
@@ -103,7 +145,7 @@
        (switch-to-buffer selected)))))
 
 (defun tabgo-bar ()
-  "TODO"
+  "Jump to tabs on the tab-bar."
   (interactive)
   (tabgo--with-tab-bar-highlighted
    (let ((result (read-key "Which?")))
@@ -111,7 +153,7 @@
        (tab-switch (alist-get 'name selected))))))
 
 (defun tabgo ()
-  "TODO"
+  "Jump to tabs on either tab-bar or tab-line."
   (interactive)
   (tabgo--with-tab-bar-highlighted
    (tabgo--with-tab-line-highlighted
