@@ -6,7 +6,7 @@
 ;; Version: 1.0.0
 ;; Homepage: https://github.com/isamert/empv.el
 ;; License: GPL-3.0-or-later
-;; Package-Requires: ((emacs "28.1"))
+;; Package-Requires: ((emacs "27.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@
 ;;     (bind-key "M-t" #'tabgo)
 ;;
 ;; Once you have bound `tabgo', you can call it by pressing the key
-;; you bound it to. You'll see that highlighted characters appear on
-;; the tab-bar and tab-line tab names. Simply press the one that you
+;; you bound it to.  You'll see that highlighted characters appear on
+;; the tab-bar and tab-line tab names.  Simply press the one that you
 ;; want to go to and `tabgo' will switch to it for you.
 
 ;;; Code:
@@ -42,7 +42,7 @@
 (require 'tab-bar)
 
 (defgroup tabgo nil
-  "Jump to tabs, avy-style."
+  "Jump to tabs, avy style."
   :group 'convenience
   :prefix "tabgo-")
 
@@ -50,14 +50,14 @@
   '((t (:weight bold :background "blue" :foreground "white")))
   "Face used for the leading chars.")
 
-(defcustom tabgo-tab-bar-keys "123456789"
+(defcustom tabgo-tab-bar-keys "1234567890-="
   "Keys to use for selecting tab-bar tabs."
   :group 'tabgo
   :type '(choice
           (string :tag "String containing the characters")
           (repeat character :tag "List of characters")))
 
-(defcustom tabgo-tab-line-keys "qwertyuiop"
+(defcustom tabgo-tab-line-keys "qwertyuiop[]"
   "Keys to use for selecting tab-line tabs."
   :group 'tabgo
   :type '(choice
@@ -65,24 +65,24 @@
           (repeat character :tag "List of characters")))
 
 (defun tabgo--nth (n xs)
+  "Select Nth element from XS.
+XS can be an array or list."
   (if (stringp xs)
       (aref xs n)
     (nth n xs)))
 
 (defun tabgo--get-key (type index)
+  "Get a key for INDEX.
+TYPE can be either \\='line or \\='tab."
   (let* ((keys (pcase type
                  ('line tabgo-tab-line-keys)
-                 ('bar tabgo-tab-bar-keys)))
-         (l (length keys))
-         (x (% index l))
-         (first-key (tabgo--nth x keys)))
-    (propertize
-     (if (>= index l)
-         (format "%c%c" first-key (tabgo--nth x (reverse keys)))
-       (format "%c" first-key))
-     'face 'tabgo-face)))
+                 ('bar tabgo-tab-bar-keys))))
+    (if (>= (1+ index) (length keys))
+        "?"
+      (propertize (format "%c" (tabgo--nth index keys)) 'face 'tabgo-face))))
 
 (defmacro tabgo--with-tab-line-highlighted (&rest forms)
+  "Highlight tab-line tabs and execute FORMS."
   `(let* ((tabgo-tab-line-map (make-hash-table :test #'equal))
           (old-tab-line-fn tab-line-tab-name-format-function)
           (tab-line-tab-name-format-function
@@ -94,12 +94,12 @@
      (set-window-parameter nil 'tab-line-cache nil)
      (force-mode-line-update t)
      ,@forms
-     (set-window-parameter nil 'tab-line-cache nil)
      (force-mode-line-update t)))
 
 ;; FIXME Does not work properly with the following configuration:
 ;; (setq tab-bar-auto-width t)
 (defmacro tabgo--with-tab-bar-highlighted (&rest forms)
+  "Highlight tab-bar tabs and execute FORMS."
   `(let* ((tabgo-tab-bar-map (make-hash-table :test #'equal))
           (old-tab-bar-fn tab-bar-tab-name-format-function)
           (tab-bar-tab-name-format-function
@@ -109,7 +109,7 @@
                       (new-format (format "%s%s"
                                           key
                                           (substring old-format 1))))
-                 (map-put! tabgo-tab-bar-map (substring-no-properties key) tab)
+                 (map-put! tabgo-tab-bar-map (substring-no-properties key) i)
                  (if (string= old-format new-format)
                      ;; HACK If new-format and old-format equal to
                      ;; each other string-wise, even if the text
@@ -132,9 +132,6 @@
      ,@forms
      (force-mode-line-update t)))
 
-;; FIXME only reads one key, check if there are remaining candidates
-;; FIXME multi char keys breaks the width, (substring 2 old-format)
-
 (defun tabgo-line ()
   "Jump to tabs on the tab-line."
   (interactive)
@@ -148,9 +145,9 @@
   "Jump to tabs on the tab-bar."
   (interactive)
   (tabgo--with-tab-bar-highlighted
-   (let ((result (read-key "Which?")))
+   (let ((result (char-to-string (read-key "Which?"))))
      (when-let (selected (map-elt tabgo-tab-bar-map result))
-       (tab-switch (alist-get 'name selected))))))
+       (tab-bar-select-tab selected)))))
 
 (defun tabgo ()
   "Jump to tabs on either tab-bar or tab-line."
@@ -162,7 +159,7 @@
       (when-let (selected (map-elt tabgo-tab-line-map result))
         (switch-to-buffer selected))
       (when-let (selected (map-elt tabgo-tab-bar-map result))
-        (tab-switch (alist-get 'name selected)))))))
+        (tab-bar-select-tab selected))))))
 
 (provide 'tabgo)
 ;;; tabgo.el ends here
