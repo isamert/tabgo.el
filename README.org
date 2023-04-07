@@ -46,3 +46,8 @@ There are also ~tabgo-line~ and ~tabgo-bar~ functions that you can use, ~tabgo~ 
 - ~tabgo-tab-line-keys~ :: keys to use for selecting ~tab-line~ tabs.
 
 You can customize these variables by setting them either as a string containing the characters you want to use or as a list of characters.
+
+* Limitations
+
+- ~tabgo~ does not highlight tabs if there are no keys left in the ~tabgo-tab-bar-keys~ or ~tabgo-tab-line-keys~. This is intentional because I want to have keys to appear in a deterministic way.
+- If you have ~tab-bar-auto-width~ set to a non-nil value, ~tabgo~ distorts the length of the tabs in the selection phase. I was not able to get around this, PR's are welcome.
