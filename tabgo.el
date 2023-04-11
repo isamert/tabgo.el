@@ -96,8 +96,6 @@ TYPE can be either \\='line or \\='tab."
      ,@forms
      (force-mode-line-update t)))
 
-;; FIXME Does not work properly with the following configuration:
-;; (setq tab-bar-auto-width t)
 (defmacro tabgo--with-tab-bar-highlighted (&rest forms)
   "Highlight tab-bar tabs and execute FORMS."
   `(let* ((tabgo-tab-bar-map (make-hash-table :test #'equal))
@@ -106,9 +104,15 @@ TYPE can be either \\='line or \\='tab."
            (lambda (tab i)
              (let* ((key (tabgo--get-key 'bar (1- i)))
                     (old-format (funcall old-tab-bar-fn tab i))
-                    (new-format (format "%s%s"
-                                        key
-                                        (substring old-format 1))))
+                    (new-format (format "%s%s" key (substring old-format 1))))
+               ;; HACK If tab-bar-auto-width is non-nil, then the text
+               ;; property of the first char becomes important for
+               ;; some reason and we can't override it with
+               ;; tabgo-face. Thus, we put our `key' as the second
+               ;; char in this case.
+               (when tab-bar-auto-width
+                 (setq new-format (format "~%s%s" key (substring old-format 2)))
+                 (add-text-properties 0 1 (text-properties-at 0 old-format) new-format))
                (map-put! tabgo-tab-bar-map (substring-no-properties key) i)
                (if (string= old-format new-format)
                    ;; HACK If new-format and old-format equal to
@@ -124,9 +128,7 @@ TYPE can be either \\='line or \\='tab."
                      ;; the end of their tab name, instead of what
                      ;; it's supposed to be.
                      (add-text-properties 0 1 (text-properties-at (1- (length new-format)) new-format) placeholder)
-                     (format "%s%s"
-                             (substring new-format 0 (1- (length new-format)))
-                             placeholder))
+                     (format "%s%s" (substring new-format 0 (1- (length new-format))) placeholder))
                  new-format)))))
      (force-mode-line-update t)
      ,@forms
