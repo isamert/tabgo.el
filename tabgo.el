@@ -4,7 +4,7 @@
 
 ;; Author: Isa Mert Gurbuz <isamertgurbuz@gmail.com>
 ;; Version: 1.0.0
-;; Homepage: https://github.com/isamert/empv.el
+;; Homepage: https://github.com/isamert/tabgo.el
 ;; License: GPL-3.0-or-later
 ;; Package-Requires: ((emacs "27.1"))
 
