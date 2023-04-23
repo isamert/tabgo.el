@@ -1,29 +1,35 @@
 #+TITLE: tabgo.el
 
+[[https://melpa.org/#/empv][file:https://melpa.org/packages/tabgo-badge.svg]]
+
 Go to tab, avy style.
 
 [[file:https://user-images.githubusercontent.com/8031017/223504769-2e5feed5-28a9-4343-b543-18b36005bc08.gif]]
 
 * Installation
 
-You'll need to download the package and add it to your ~load-path~. Once you've done that, you can load the package with ~(require 'tabgo)~.
+/tabgo/ is available through [[https://melpa.org/#/tabgo][MELPA]]. If you have it set up already, just do ~M-x package-install tabgo~ and you are good to go. Otherwise please see [[https://melpa.org/#/getting-started][MELPA getting started]] page to learn how you can install packages through MELPA or see the following installation options.
 
-Alternatively, you can use the ~straight~ or ~quelpa~ package managers in conjunction with ~use-package~.
+Another way to install /tabgo/ would be using either [[https://github.com/radian-software/straight.el][straight]] or [[https://github.com/quelpa/quelpa-use-package][quelpa]] package managers:
 
-To use ~quelpa~, add the following code to your Emacs configuration:
-
-#+begin_src emacs-lisp
-  (use-package tabgo
-    :ensure t
-    :quelpa (tabgo :fetcher github :repo "isamert/tabgo.el"))
-#+end_src
-
-If you prefer ~straight~, use the following code instead:
-
-#+begin_src emacs-lisp
+#+begin_src elisp
+  ;; Using straight:
   (use-package tabgo
     :ensure t
     :straight (:host github :repo "isamert/tabgo.el"))
+
+  ;; Using quelpa:
+  (use-package tabgo
+    :ensure t
+    :quelpa (tabgo
+             :fetcher github
+             :repo "isamert/tabgo.el"))
+#+end_src
+
+Yet another option is just downloading =tabgo.el= file and putting into your =load-path=, afterwards you can simply do the following in your =init.el=:
+
+#+begin_src elisp
+  (require 'tabgo)
 #+end_src
 
 * Usage
