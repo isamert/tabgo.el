@@ -33,7 +33,7 @@ Yet another option is just downloading =tabgo.el= file and putting into your =lo
 To use ~tabgo~, bind the ~tabgo~ function to a key of your choice:
 
 #+begin_src emacs-lisp
-  (bind-key "M-t" #'tabgo)
+  (define-key global-map (kbd "M-t") #'tabgo)
 #+end_src
 
 Once you have bound ~tabgo~, you can call it by pressing the key you bound it to. You'll see that highlighted characters appear on the tab-bar and tab-line tab names. Simply press the one that you want to go to and ~tabgo~ will switch to it for you.
