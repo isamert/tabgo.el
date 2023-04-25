@@ -15,15 +15,11 @@ Another way to install /tabgo/ would be using either [[https://github.com/radian
 #+begin_src elisp
   ;; Using straight:
   (use-package tabgo
-    :ensure t
     :straight (:host github :repo "isamert/tabgo.el"))
 
   ;; Using quelpa:
   (use-package tabgo
-    :ensure t
-    :quelpa (tabgo
-             :fetcher github
-             :repo "isamert/tabgo.el"))
+    :quelpa (tabgo :fetcher github :repo "isamert/tabgo.el"))
 #+end_src
 
 Yet another option is just downloading =tabgo.el= file and putting into your =load-path=, afterwards you can simply do the following in your =init.el=:
