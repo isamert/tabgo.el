@@ -52,3 +52,4 @@ You can customize these variables by setting them either as a string containing 
 * Limitations
 
 - ~tabgo~ does not highlight tabs if there are no keys left in the ~tabgo-tab-bar-keys~ or ~tabgo-tab-line-keys~. This is intentional because I want to have keys to appear in a deterministic way.
+- If you have ~tab-bar-auto-width~ set to a non nil value (which is the default), you may experience a slight shift on tab widths while ~tabgo~ highlighting is active. Please take a look at the discussion on [[https://github.com/isamert/tabgo.el/issues/2][#2]] to understand why this happens.
