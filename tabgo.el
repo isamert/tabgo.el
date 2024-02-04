@@ -134,6 +134,7 @@ TYPE can be either \\='line or \\='tab."
      ,@forms
      (force-mode-line-update t)))
 
+;;;###autoload
 (defun tabgo-line ()
   "Jump to tabs on the tab-line."
   (interactive)
@@ -143,6 +144,7 @@ TYPE can be either \\='line or \\='tab."
      (when-let (selected (map-elt tabgo-tab-line-map result))
        (switch-to-buffer selected)))))
 
+;;;###autoload
 (defun tabgo-bar ()
   "Jump to tabs on the tab-bar."
   (interactive)
@@ -151,6 +153,7 @@ TYPE can be either \\='line or \\='tab."
      (when-let (selected (map-elt tabgo-tab-bar-map result))
        (tab-bar-select-tab selected)))))
 
+;;;###autoload
 (defun tabgo ()
   "Jump to tabs on either tab-bar or tab-line."
   (interactive)
