@@ -3,7 +3,7 @@
 ;; Copyright (C) 2023  Isa Mert Gurbuz
 
 ;; Author: Isa Mert Gurbuz <isamertgurbuz@gmail.com>
-;; Version: 1.0.0
+;; Version: 1.0.1
 ;; Homepage: https://github.com/isamert/tabgo.el
 ;; License: GPL-3.0-or-later
 ;; Package-Requires: ((emacs "27.1"))
@@ -134,15 +134,26 @@ TYPE can be either \\='line or \\='tab."
      ,@forms
      (force-mode-line-update t)))
 
+(defun tabgo--select-tab-line (tabline)
+  (if (bufferp tabline)
+      (switch-to-buffer tabline)
+    (if-let* ((buffer (alist-get 'buffer tabline)))
+        (switch-to-buffer buffer)
+      (when-let* ((select (alist-get 'select tabline)))
+        ;; See `tab-line-select-tab'
+        (when (functionp select)
+          (funcall select)
+          (force-mode-line-update))))))
+
 ;;;###autoload
 (defun tabgo-line ()
   "Jump to tabs on the tab-line."
   (interactive)
   (tabgo--with-tab-line-highlighted
-   (let ((result (read-key "Which?")))
+   (let ((result (char-to-string (read-key "Which?"))))
      (set-window-parameter nil 'tab-line-cache nil)
      (when-let (selected (map-elt tabgo-tab-line-map result))
-       (switch-to-buffer selected)))))
+       (tabgo--select-tab-line selected)))))
 
 ;;;###autoload
 (defun tabgo-bar ()
@@ -159,10 +170,10 @@ TYPE can be either \\='line or \\='tab."
   (interactive)
   (tabgo--with-tab-bar-highlighted
    (tabgo--with-tab-line-highlighted
-    (let ((result (format "%c" (read-key "Which?"))))
+    (let ((result (char-to-string (read-key "Which?"))))
       (set-window-parameter nil 'tab-line-cache nil)
       (when-let (selected (map-elt tabgo-tab-line-map result))
-        (switch-to-buffer selected))
+        (tabgo--select-tab-line selected))
       (when-let (selected (map-elt tabgo-tab-bar-map result))
         (tab-bar-select-tab selected))))))
 
