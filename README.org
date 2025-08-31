@@ -1,6 +1,8 @@
 #+TITLE: tabgo.el
 
-[[https://melpa.org/#/empv][file:https://melpa.org/packages/tabgo-badge.svg]]
+
+[[https://stable.melpa.org/#/tabgo][file:https://stable.melpa.org/packages/tabgo-badge.svg]]
+[[https://melpa.org/#/tabgo][file:https://melpa.org/packages/tabgo-badge.svg]]
 
 Go to tab, avy style.
 
