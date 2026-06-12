@@ -55,14 +55,14 @@
   :group 'tabgo
   :type '(choice
           (string :tag "String containing the characters")
-          (repeat character :tag "List of characters")))
+          (repeat (character :tag "Character"))))
 
 (defcustom tabgo-tab-line-keys "qwertyuiop[]"
   "Keys to use for selecting tab-line tabs."
   :group 'tabgo
   :type '(choice
           (string :tag "String containing the characters")
-          (repeat character :tag "List of characters")))
+          (repeat (character :tag "Character"))))
 
 (defun tabgo--nth (n xs)
   "Select Nth element from XS.
@@ -135,6 +135,8 @@ TYPE can be either \\='line or \\='tab."
      (force-mode-line-update t)))
 
 (defun tabgo--select-tab-line (tabline)
+  "Switch to the tab-line tab represented by TABLINE.
+TABLINE can be a buffer, an alist with a \\='buffer or \\='select key."
   (if (bufferp tabline)
       (switch-to-buffer tabline)
     (if-let* ((buffer (alist-get 'buffer tabline)))
@@ -152,7 +154,7 @@ TYPE can be either \\='line or \\='tab."
   (tabgo--with-tab-line-highlighted
    (let ((result (char-to-string (read-key "Which?"))))
      (set-window-parameter nil 'tab-line-cache nil)
-     (when-let (selected (map-elt tabgo-tab-line-map result))
+     (when-let* ((selected (map-elt tabgo-tab-line-map result)))
        (tabgo--select-tab-line selected)))))
 
 ;;;###autoload
@@ -161,7 +163,7 @@ TYPE can be either \\='line or \\='tab."
   (interactive)
   (tabgo--with-tab-bar-highlighted
    (let ((result (char-to-string (read-key "Which?"))))
-     (when-let (selected (map-elt tabgo-tab-bar-map result))
+     (when-let* ((selected (map-elt tabgo-tab-bar-map result)))
        (tab-bar-select-tab selected)))))
 
 ;;;###autoload
@@ -172,9 +174,9 @@ TYPE can be either \\='line or \\='tab."
    (tabgo--with-tab-line-highlighted
     (let ((result (char-to-string (read-key "Which?"))))
       (set-window-parameter nil 'tab-line-cache nil)
-      (when-let (selected (map-elt tabgo-tab-line-map result))
+      (when-let* ((selected (map-elt tabgo-tab-line-map result)))
         (tabgo--select-tab-line selected))
-      (when-let (selected (map-elt tabgo-tab-bar-map result))
+      (when-let* ((selected (map-elt tabgo-tab-bar-map result)))
         (tab-bar-select-tab selected))))))
 
 (provide 'tabgo)
