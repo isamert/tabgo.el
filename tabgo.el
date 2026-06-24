@@ -3,7 +3,7 @@
 ;; Copyright (C) 2023  Isa Mert Gurbuz
 
 ;; Author: Isa Mert Gurbuz <isamertgurbuz@gmail.com>
-;; Version: 1.0.1
+;; Version: 1.0.2
 ;; Homepage: https://github.com/isamert/tabgo.el
 ;; License: GPL-3.0-or-later
 ;; Package-Requires: ((emacs "27.1"))
