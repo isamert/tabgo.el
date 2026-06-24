@@ -38,6 +38,7 @@
 ;;; Code:
 
 (require 'map)
+(require 'seq)
 (require 'tab-line)
 (require 'tab-bar)
 
@@ -87,10 +88,15 @@ TYPE can be either \\='line or \\='tab."
           (old-tab-line-fn tab-line-tab-name-format-function)
           (tab-line-tab-name-format-function
            (lambda (tab tabs)
-             (let ((key (tabgo--get-key 'line (seq-position tabs 'dummy (lambda (it _) (equal tab it)))))
-                   (old-format (funcall old-tab-line-fn tab tabs)))
-               (map-put! tabgo-tab-line-map (substring-no-properties key) tab)
-               (format "%s%s" key (substring old-format 1))))))
+             (let* ((hscroll (window-parameter nil 'tab-line-hscroll))
+                    (offset (if (numberp hscroll) (truncate hscroll) 0))
+                    (index (- (seq-position tabs 'dummy (lambda (it _) (equal tab it))) offset))
+                    (old-format (funcall old-tab-line-fn tab tabs)))
+               (if (< index 0)
+                   old-format
+                 (let ((key (tabgo--get-key 'line index)))
+                   (map-put! tabgo-tab-line-map (substring-no-properties key) tab)
+                   (format "%s%s" key (substring old-format 1))))))))
      (set-window-parameter nil 'tab-line-cache nil)
      (force-mode-line-update t)
      ,@forms
