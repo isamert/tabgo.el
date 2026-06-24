@@ -117,7 +117,7 @@ TYPE can be either \\='line or \\='tab."
                ;; tabgo-face. Thus, we put our `key' as the second
                ;; char in this case.
                (when tab-bar-auto-width
-                 (setq new-format (format "~%s%s" key (substring old-format 2)))
+                 (setq new-format (copy-sequence (format "~%s%s" key (substring old-format 2))))
                  (add-text-properties 0 1 (text-properties-at 0 old-format) new-format))
                (map-put! tabgo-tab-bar-map (substring-no-properties key) i)
                (if (string= old-format new-format)
@@ -126,7 +126,7 @@ TYPE can be either \\='line or \\='tab."
                    ;; properties are different, tab-bar is not
                    ;; updated with new text properties. So we do
                    ;; some changes the original text.
-                   (let ((placeholder "~"))
+                   (let ((placeholder (copy-sequence "~")))
                      ;; If the old-format has the X button at the
                      ;; end, the resulting new-format will look
                      ;; exactly the same (except for the leading
